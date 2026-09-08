@@ -1,53 +1,55 @@
 import javax.swing.*;
 import java.util.ArrayList;
 
-class Producto {
+class Vehiculo {
     private String codigo;
-    private String nombre;
+    private String marca;
+    private String modelo;
     private int anio;
     private double precio;
 
-    public Producto(String codigo, String nombre, int anio, double precio) {
+    public Vehiculo(String codigo, String marca, String modelo, int anio, double precio) {
         this.codigo = codigo;
-        this.nombre = nombre;
+        this.marca = marca;
+        this.modelo = modelo;
         this.anio = anio;
         this.precio = precio;
     }
 
     public String getCodigo() { return codigo; }
-    public String getNombre() { return nombre; }
+    public String getMarca() { return marca; }
+    public String getModelo() { return modelo; }
     public int getAnio() { return anio; }
     public double getPrecio() { return precio; }
 }
 
 public class ModuloEliminacion {
-
-    // 🔹 Función para eliminar por código único
-    public static void eliminarRegistro(ArrayList<Producto> lista) {
+    public static void eliminarRegistro(ArrayList<Vehiculo> lista) {
         try {
-            String codigo = JOptionPane.showInputDialog("Ingrese el código del registro a eliminar:");
-            
+            String codigo = JOptionPane.showInputDialog("Ingrese el código único del vehículo a eliminar:");
+
             if (codigo == null || codigo.trim().isEmpty()) {
                 throw new NullPointerException("Código vacío o cancelado.");
             }
 
             boolean encontrado = false;
             for (int i = 0; i < lista.size(); i++) {
-                if (lista.get(i).getCodigo().equals(codigo)) {
+                if (lista.get(i).getCodigo().equalsIgnoreCase(codigo)) {
                     int confirmacion = JOptionPane.showConfirmDialog(null,
-                        "¿Está seguro de eliminar el registro con código " + codigo + "?",
+                        "¿Está seguro de eliminar el vehículo con código " + codigo + "?",
                         "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
 
                     if (confirmacion == JOptionPane.YES_OPTION) {
                         lista.remove(i);
-                        JOptionPane.showMessageDialog(null, "Registro eliminado exitosamente.");
+                        JOptionPane.showMessageDialog(null, "Vehículo eliminado exitosamente.");
                     }
                     encontrado = true;
                     break;
                 }
             }
+
             if (!encontrado) {
-                JOptionPane.showMessageDialog(null, "No se encontró el registro con ese código.");
+                JOptionPane.showMessageDialog(null, "No se encontró el vehículo con ese código.");
             }
 
         } catch (NullPointerException e) {
@@ -57,11 +59,11 @@ public class ModuloEliminacion {
         }
     }
 
-    // 🔹 Ejemplo de validaciones con try-catch
-    public static void ingresarDatos(ArrayList<Producto> lista) {
+    public static void ingresarDatos(ArrayList<Vehiculo> lista) {
         try {
             String codigo = JOptionPane.showInputDialog("Ingrese código único:");
-            String nombre = JOptionPane.showInputDialog("Ingrese nombre:");
+            String marca = JOptionPane.showInputDialog("Ingrese marca:");
+            String modelo = JOptionPane.showInputDialog("Ingrese modelo:");
 
             int anio = Integer.parseInt(JOptionPane.showInputDialog("Ingrese año:"));
             double precio = Double.parseDouble(JOptionPane.showInputDialog("Ingrese precio:"));
@@ -70,8 +72,8 @@ public class ModuloEliminacion {
                 throw new IllegalArgumentException("Año y precio deben ser positivos.");
             }
 
-            lista.add(new Producto(codigo, nombre, anio, precio));
-            JOptionPane.showMessageDialog(null, "Registro agregado correctamente.");
+            lista.add(new Vehiculo(codigo, marca, modelo, anio, precio));
+            JOptionPane.showMessageDialog(null, "Vehículo registrado correctamente.");
 
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "Error: debe ingresar números válidos en año y precio.");
@@ -83,9 +85,8 @@ public class ModuloEliminacion {
     }
 
     public static void main(String[] args) {
-        ArrayList<Producto> lista = new ArrayList<>();
+        ArrayList<Vehiculo> lista = new ArrayList<>();
 
-        // Solo para probar tu módulo
         ingresarDatos(lista);
         eliminarRegistro(lista);
     }
